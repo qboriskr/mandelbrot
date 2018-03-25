@@ -4,12 +4,12 @@ def rpt(f, n, x):
     return rpt(f, n - 1, f(x))
 
 
-def m(z, c):
-    return z *z + c
+def mandel(z, c):
+    return z * z + c
 
 
-def m_c(c):
-    return lambda z: m(z, c)
+def mandel_fix_c(c):
+    return lambda z: mandel(z, c)
 
 
 def scale_and_rotate(xs, ys, i, j):
@@ -19,14 +19,16 @@ def scale_and_rotate(xs, ys, i, j):
 
 xs = 80
 ys = 160
-di = 0
-colors = " .:-=+*#%@"
+palette = " .:-=+*#%@"
+palette_size = len(palette)
+zero = complex(0, 0)
 for i in range(xs):
     for j in range(ys):
         try:
-            c = abs(rpt(m_c(scale_and_rotate(xs / 2, ys / 2, i - di, j)), 10, complex(0, 0)))
+            c = scale_and_rotate(xs / 2, ys / 2, i, j)
+            r = abs(rpt(mandel_fix_c(c), 10, zero))
         except:
-            c=2
-        s = colors[int(c * 10)] if c < 1.0 else " "
-        print(s, end="")
+            r = 2
+        color = palette[int(r * palette_size)] if r < 1.0 else " "
+        print(color, end="")
     print()
